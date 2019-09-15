@@ -13,13 +13,13 @@ class DNA
 {
     
     public:
-
+        // variables for all characters, number of lines, etc, but I took Comp Sci II a long time ago so I couldn't figure out how to use them privately
         string dna_seq;
         double chrs = 0.0; 
         double lines = 0.0;
         double mean = 0.0;
         double variance = 0.0;
-
+        // function names, this whole file is just a mess and normally I like to submit a really clean file with the right styling but for now, it works.
         int getSum(void);
         int getLines(void);
         double getMean(void);
@@ -35,7 +35,7 @@ class DNA
         void reset(void);
 
 };
-
+// Calculuates probability of a single nucleotide
 string DNA::calcSingle(string one_line)
 {
 
@@ -67,7 +67,7 @@ string DNA::calcSingle(string one_line)
 
     return "Probability of A: " + std::to_string(probA) + "\nProbability of C: " + std::to_string(probC) + "\nProbability of T: " + std::to_string(probT) + "\nProbability of G: " + std::to_string(probG) + "\n\n";
 }
-
+// calculates probability of a bigram
 string DNA::calcBi(string one_line)
 {
     int total_bigrams = 0;
@@ -92,9 +92,8 @@ string DNA::calcBi(string one_line)
     {
 
         char p1 = one_line[i];
- //       cout << typeid(p1).name() << endl;
         char p2 = one_line[i + 1];
- //       string bi = p1 + p2; for some reason when I concat they are integers, but outputting separate they are chars
+ //       string bi = p1 + p2; for some reason when I concat they are integers, but outputting separate they are chars. So now we have the mess below that works 
         ++total_bigrams;
         if (p1 == 'A' && p2 == 'A') {
             ++AA;
@@ -149,7 +148,7 @@ string DNA::calcBi(string one_line)
     return "Probability of AA: " + std::to_string(float(AA) / float(total_bigrams)) + "\nProbability of AC: " + std::to_string(float(AC) / float(total_bigrams)) + "\nProbability of AT: " + std::to_string(float(AT) / float(total_bigrams)) + "\nProbability of AG: " + std::to_string(float(AG) / float(total_bigrams)) + "\nProbability of CA: " + std::to_string(float(CA) / float(total_bigrams)) + "\nProbability of CC: " + std::to_string(float(CC) / float(total_bigrams)) + "\nProbability of CT: " + std::to_string(float(CT) / float(total_bigrams)) + "\nProbability of CG: " + std::to_string(float(CG) / float(total_bigrams)) + "\nProbability of TA: " + std::to_string(float(TA) / float(total_bigrams)) + "\nProbability of TC: " + std::to_string(float(TC) / float(total_bigrams)) + "\nProbability of TT: " + std::to_string(float(TT) / float(total_bigrams)) + "\nProbability of TG: " + std::to_string(float(TG) / float(total_bigrams)) + "\nProbability of GA: " + std::to_string(float(GA) / float(total_bigrams)) + "\nProbability of GC: " + std::to_string(float(GC) / float(total_bigrams)) + "\nProbability of GT: " + std::to_string(float(GT) / float(total_bigrams)) + "\nProbability of GG: " + std::to_string(float(GG) / float(total_bigrams)) + "\n\n";
 
 }
-
+// resets variables when reading a new document to append at the end of a file
 void DNA::reset(void)
 {
     chrs = 0;
@@ -157,7 +156,7 @@ void DNA::reset(void)
     mean = 0.0;
     variance = 0.0;
 }
-
+// gets number of lines
 int DNA::getLines(void)
 {
     return lines;
@@ -177,12 +176,12 @@ double DNA::getVariance(void)
 {
     return variance / lines;
 }
-
+// gets standard deviation
 double DNA::getStand(void)
 {
     return sqrt((variance / lines));
 }
-
+// gets random dna sequence, length based on gaussian distribution 
 string DNA::getRandSeq(int length)
 {
     int r;
@@ -242,20 +241,19 @@ void DNA::setString(string dna)
     addChars(dna_seq.length());
 }
 
-
+// main program
 int main(int argc, char** argv) 
 {
     DNA dna;
-    const int new_dnas = 1000;
     
     string inp;
     string file;
-
-    ofstream outfile("dproctor.out");
+    
+    ofstream outfile("dproctor.out"); // outfile
     outfile << "Dan Proctor\n";
     outfile << "2288481\n";
     outfile << "CPSC 350\n\n";
-
+    // for this assignment, I did not do any checking for right input. 
     cout << "Would you like to process a DNA file? (yes/no): ";
     cin >> inp;
     
@@ -321,9 +319,9 @@ int main(int argc, char** argv)
             double b = ((double) rand() / (RAND_MAX));
             double c = (sqrt((-2 * log(a))) * (cos((2 * M_PI * b)))); 
             double d = (st_dev * c) + mean; 
-            d = round(d);
+            d = round(d); // rounds because no decimals in length of a string
 
-            if (count <= 45 || count >= 955)
+            if (count <= 45 || count >= 955) // more than 2 standard deviations from the mean
             {
                 if (d >= 1 && d <= ceil(.045 * mean))
                 {
@@ -332,7 +330,7 @@ int main(int argc, char** argv)
                 }
             }
             
-            else if ((count <= 318 && count > 45) || (count >= 682 && count < 955))       
+            else if ((count <= 318 && count > 45) || (count >= 682 && count < 955)) // more than 1 standard deviations from mean    
             {
                 if (d > .045 * mean && d <= .318 * mean)
                 {
@@ -341,7 +339,7 @@ int main(int argc, char** argv)
                 }
             } 
 
-            else if ((count <= 499 && count > 318) || (count >= 501 && count < 682))
+            else if ((count <= 499 && count > 318) || (count >= 501 && count < 682)) // one standard deviation from mean
             {
                 if (d > .318 * mean && d <= round(mean) - 1)
                 {
@@ -353,11 +351,11 @@ int main(int argc, char** argv)
             else if (count == 500)
             {
                 ++count;
-                outfile << dna.getRandSeq(round(mean)) << "\n";
+                outfile << dna.getRandSeq(round(mean)) << "\n"; // halfway is mean
             } 
             
         }
-
+        // resets variables after file is done
         dna.reset();
         cout << "Would you like to process another file? (yes/no): ";
         cin >> inp;
